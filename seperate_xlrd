@@ -1,0 +1,12 @@
+import xlrd
+
+xls = xlrd.open_workbook(r'C:\Users\sc\Desktop\test_docx\summary_sample.xls')
+sh = xls.sheet_by_index(0)
+print(sh.cell(0,0))
+for crange in sh.merged_cells:
+
+    rs, re, cs, ce = crange
+    print(rs, re, cs, ce)
+    print(crange)
+
+print(sh.merged_cells)
