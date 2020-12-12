@@ -17,6 +17,9 @@ def get_desktop():
     return winreg.QueryValueEx(key, "Desktop")[0]
 
 
+# 汇总表从第四行开始有数据 出去表头还要drop两行
+drop_index_list = [0, 1]
+
 # 文件路径
 file_dir = os.path.join(get_desktop(), 'to_merge')
 
@@ -32,7 +35,7 @@ for file in file_list:
     # 将excel转换成DataFrame
     dataframe = pd.read_excel(file_path)
     dataframe.drop([len(dataframe) - 1], inplace=True)
-    dataframe.drop(index=[0, 1], inplace=True)
+    dataframe.drop(index=drop_index_list, inplace=True)
 
     # print(dataframe)
 
@@ -42,7 +45,7 @@ for file in file_list:
 # 多个DataFrame合并为一个
 df = pd.concat(new_list)
 # 写入到一个新excel表中
-df.to_excel(new_filename,index=False)
+df.to_excel(new_filename, index=False)
 print('总计：', len(df), '户')
 
 # for i in range(len(df)):
