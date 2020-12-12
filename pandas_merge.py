@@ -17,8 +17,12 @@ def get_desktop():
     return winreg.QueryValueEx(key, "Desktop")[0]
 
 
-# 汇总表从第四行开始有数据 出去表头还要drop两行
-drop_index_list = [0, 1]
+row_to_start = int(input('请输入数据开始的行数：'))
+drop_index_list = []
+# 汇总表从第 n 行开始有数据 出去表头还要drop n-2 行
+for i in range(0, row_to_start - 2):
+    drop_index_list.append(i)
+
 
 # 文件路径
 file_dir = os.path.join(get_desktop(), 'to_merge')
