@@ -89,6 +89,9 @@ def read_summary(filename):
     headcounts = []
     for final_row in final_rows:
         headcounts.append(final_row[1] - final_row[0] + 1)
+
+    # 老城 在headcounts删去第一个合并单元格
+    del headcounts[0]
     # print('headcounts: ', headcounts)
     # print('len of headcounts: ', len(headcounts))
 
@@ -96,12 +99,18 @@ def read_summary(filename):
     for i in range(len(headcounts) - 1):
         book_out.copy_worksheet(book_out.active)
     sheets_out = book_out.sheetnames
+    '''
     row_now = 4
+    '''
+    row_now = 6
     for i in range(len(headcounts)):
         if i < len(sheets_out):
             # fill in one sheet_in (one family)
             sheet_out = book_out[sheets_out[i]]
 
+
+            '''
+            # -------------------陵水 第四行开始 ---------------------------
             # 序号
             sheet_out['K2'] = i + 1
             # 户主
@@ -115,6 +124,67 @@ def read_summary(filename):
             sheet_out['K8'] = '共 {} 人'.format(headcounts[i])
             # 邮政编码
             sheet_out['J4'] = 572435
+            
+                        #unmerge
+            # worksheet.merged_cells获取已经合并单元格的信息；再使用worksheet.unmerge_cells()拆分单元格；
+            m_list = sheet_out.merged_cells
+            cr = []
+            for m_area in m_list:
+                # 合并单元格的起始行坐标、终止行坐标。。。。，
+                r1, r2, c1, c2 = m_area.min_row, m_area.max_row, m_area.min_col, m_area.max_col
+                # 纵向合并单元格的位置信息提取出
+                if r2 - r1 > 0:
+                    cr.append((r1, r2, c1, c2))
+
+            for r in cr:
+                sheet_out.unmerge_cells(start_row=r[0], end_row=r[1], start_column=r[2], end_column=r[3])
+
+
+            # 家庭成员信息
+            for j in range(headcounts[i]):
+                # 姓名
+                sheet_out.cell(10 + j, 1).value = sheet_in.cell(row_now, 4).value
+                # 关系
+                # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=3, end_column=4)
+                sheet_out.cell(10 + j, 3).value = sheet_in.cell(row_now, 5).value
+                # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=3, end_column=4)
+                # 身份证
+                # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
+                sheet_out.cell(10 + j, 5).value = sheet_in.cell(row_now, 7).value
+                if sheet_in.cell(row_now, 5).value in ['户主','本人']:
+                    sheet_out['H5'] = sheet_in.cell(row_now, 7).value
+                # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
+                # 备注
+                # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
+                sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 11).value
+                # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
+
+
+                row_now += 1
+
+            for r in cr:
+                # worksheet.merge_cells()合并单元格
+                sheet_out.merge_cells(start_row=r[0], end_row=r[1], start_column=r[2], end_column=r[3])
+
+
+            '''
+            # -------------------老城 第六行开始 无证件类型---------------------------
+            # 序号
+            sheet_out['K2'] = i + 1
+            # 户主
+            sheet_out['C3'] = sheet_in.cell(row_now, 2).value
+            # 集体经济组织名称 地址
+            sheet_out['C2'] = sheet_in.cell(2, 3).value
+            sheet_out['C4'] = sheet_in.cell(2, 3).value
+            # 电话
+            sheet_out['H3'] = sheet_in.cell(row_now, 9).value
+            # 家庭成员总数
+            sheet_out['K8'] = '共 {} 人'.format(headcounts[i])
+            # 邮政编码
+            sheet_out['J4'] = 572435
+
+
+
 
             #unmerge
             # worksheet.merged_cells获取已经合并单元格的信息；再使用worksheet.unmerge_cells()拆分单元格；
@@ -147,7 +217,7 @@ def read_summary(filename):
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
                 # 备注
                 # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
-                sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 11).value
+                sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 10).value
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
 
 
