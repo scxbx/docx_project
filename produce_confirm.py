@@ -1,7 +1,31 @@
 import os
 
 import openpyxl
+import win32com
 
+
+def xls_to_xlsx(folder_path, file_name):
+    """
+    excel  .xls 后缀 改成 .xlsx 后缀
+    folder_path 文件夹路径
+    file_name 文件名字 带后缀 比如 aa.xls
+    """
+    folder_path = folder_path.replace('/', '\\')
+    file_name = file_name.replace('/', '\\')
+    name, suffix = file_name.split('.')
+    excel_file_path = os.path.join(folder_path, file_name)
+
+    excel = win32com.client.gencache.EnsureDispatch('Excel.Application')  # 要看MIME手册
+    wb = excel.Workbooks.Open(excel_file_path)
+    suffix = f".{suffix}x"
+    new_file_name = f"{name}{suffix}"
+    new_excel_file_path = os.sep.join([folder_path, new_file_name])
+    # tset
+    print("new_excel_file_path: " + new_excel_file_path)
+    wb.SaveAs(new_excel_file_path, FileFormat=51)
+    wb.Close()
+    excel.Application.Quit()
+    return new_excel_file_path
 
 def produce_a_confirm(filename, start_row):
     # 数据开始的行数

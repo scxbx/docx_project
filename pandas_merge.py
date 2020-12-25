@@ -24,7 +24,6 @@ def merge_a_family(in_filename, out_filename, population):
     ws = wb.active
 
     nrow = ws.max_row
-    print(nrow)
 
     merge_col_num_list = [1, 2, 3, 9, 10]
     current_merge_head = 2
