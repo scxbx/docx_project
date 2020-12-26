@@ -77,14 +77,14 @@ def produce_a_confirm(filename, start_row):
             # 户主
             sheet_out['C3'] = sheet_in.cell(i, 2).value
             # 集体经济组织名称 地址
-            sheet_out['C2'] = sheet_in.cell(6, 8).value.strip()
-            sheet_out['C4'] = sheet_in.cell(6, 8).value.strip()
+            sheet_out['C2'] = sheet_in.cell(start_row, 9).value.strip()
+            sheet_out['C4'] = sheet_in.cell(start_row, 9).value.strip()
             # 电话
-            sheet_out['H3'] = sheet_in.cell(i, 9).value
+            sheet_out['H3'] = sheet_in.cell(i, 10).value
             # 家庭成员总数
             sheet_out['K8'] = '共 {} 人'.format(sheet_in.cell(i, 3).value)
             # 邮政编码
-            sheet_out['J4'] = 571900
+            sheet_out['J4'] = 572900
 
             serial_number += 1
             count_in_family = 0
@@ -98,7 +98,7 @@ def produce_a_confirm(filename, start_row):
         if sheet_in.cell(i, 5).value in ['户主', '本人']:
             sheet_out['H5'] = sheet_in.cell(i, 7).value
         # 备注
-        sheet_out.cell(10 + count_in_family, 9).value = sheet_in.cell(i, 10).value
+        sheet_out.cell(10 + count_in_family, 9).value = sheet_in.cell(i, 11).value
         count_in_family += 1
 
     filename_save = (os.path.split(filename))[1].split('.')[0] + '_确认登记表.xlsx'
@@ -117,6 +117,6 @@ if __name__ == '__main__':
     path = os.path.join(os.getcwd(), 'summary')
     for filename_in in os.listdir(path):
         # print(os.path.join(path, filename))
-        produce_a_confirm(os.path.join(path, filename_in), 6)
+        produce_a_confirm(os.path.join(path, filename_in), 4)
 
     input('Press any key to quit program.')

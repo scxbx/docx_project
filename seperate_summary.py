@@ -102,7 +102,7 @@ def read_summary(filename):
     '''
     row_now = 4
     '''
-    row_now = 6
+    row_now = 4
     for i in range(len(headcounts)):
         if i < len(sheets_out):
             # fill in one sheet_in (one family)
@@ -177,7 +177,7 @@ def read_summary(filename):
             sheet_out['C2'] = sheet_in.cell(2, 3).value
             sheet_out['C4'] = sheet_in.cell(2, 3).value
             # 电话
-            sheet_out['H3'] = sheet_in.cell(row_now, 9).value
+            sheet_out['H3'] = sheet_in.cell(row_now, 10).value
             # 家庭成员总数
             sheet_out['K8'] = '共 {} 人'.format(headcounts[i])
             # 邮政编码
@@ -217,7 +217,7 @@ def read_summary(filename):
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
                 # 备注
                 # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
-                sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 10).value
+                sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 11).value
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
 
 
