@@ -27,6 +27,7 @@ def xls_to_xlsx(folder_path, file_name):
     excel.Application.Quit()
     return new_excel_file_path
 
+
 def produce_a_confirm(filename, start_row):
     # 数据开始的行数
     start_row = start_row
@@ -48,29 +49,36 @@ def produce_a_confirm(filename, start_row):
     for r in cr:
         sheet_in.unmerge_cells(start_row=r[0], end_row=r[1], start_column=r[2], end_column=r[3])
 
-
     book_out = openpyxl.load_workbook(os.path.join(folder_path, r'..\copy.xlsx'))
     nrow = sheet_in.max_row
-    print ('nrow: ' + str(nrow))
+    print('nrow: ' + str(nrow))
 
     flag = 1
     num_family = 0
+    end_row = 0
     while flag < nrow + 1:
         if (sheet_in.cell(flag, 1).value == '合计' or sheet_in.cell(flag, 1).value == '汇总'):
             num_family = sheet_in.cell(flag, 2).value
+            end_row = flag - 1
         flag += 1
     print(num_family)
+    print(type(num_family))
     '''
     if isinstance(sheet_in.cell(nrow, 2).value, int):
         num_family = sheet_in.cell(nrow, 2).value
     else:
         num_family = 500
     '''
-    for i in range(num_family):
+
+    print('num_family: ' + str(num_family))
+    print('type of num_family: ' + str(type(num_family)))
+
+    if type(num_family) == str:
+        num_family = int(num_family)
+
+    for i in range(num_family + 4):
         book_out.copy_worksheet(book_out.active)
     sheets_out = book_out.sheetnames
-
-
 
     serial_number = 0
     # col_num_list = [1, 2, 3, 7, 8, 9]
@@ -78,7 +86,13 @@ def produce_a_confirm(filename, start_row):
     # row_now = start_row
     count_in_family = 0
     sheet_out = book_out[sheets_out[serial_number]]
-    for i in range(start_row, flag - 2):
+
+    print('start_row: ' + str(start_row))
+    print('flag: ' + str(flag))
+    print('end_row: ' + str(end_row))
+    print('num_family: ' + str(num_family))
+
+    for i in range(start_row, end_row + 1):
         if sheet_in.cell(i, 1).value is not None:
             print(serial_number)
             print(sheets_out[serial_number])
@@ -101,12 +115,12 @@ def produce_a_confirm(filename, start_row):
             count_in_family = 0
 
         # 姓名
-        sheet_out.cell(10 + count_in_family, 1).value = sheet_in.cell(i, 4).value
+        sheet_out.cell(10 + count_in_family, 1).value = sheet_in.cell(i, 4).value.strip()
         # 关系
-        sheet_out.cell(10 + count_in_family, 3).value = sheet_in.cell(i, 5).value
+        sheet_out.cell(10 + count_in_family, 3).value = sheet_in.cell(i, 5).value.strip()
         # 身份证
         sheet_out.cell(10 + count_in_family, 5).value = sheet_in.cell(i, 7).value
-        if sheet_in.cell(i, 5).value in ['户主', '本人']:
+        if sheet_in.cell(i, 5).value.strip() in ['户主', '本人']:
             sheet_out['H5'] = sheet_in.cell(i, 7).value
         # 备注
         sheet_out.cell(10 + count_in_family, 9).value = sheet_in.cell(i, 11).value
@@ -116,13 +130,13 @@ def produce_a_confirm(filename, start_row):
     folder_path2 = folder_path + r'\..\confirm'
     whole_save = os.path.join(folder_path2, filename_save)
 
-
     # 修改sheetname
     for i in range(len(sheets_out)):
         ws = book_out[sheets_out[i]]
         ws.title = str(i + 1)
     book_out.save(whole_save)
     book_out.close()
+
 
 if __name__ == '__main__':
     path = os.path.join(os.getcwd(), 'summary')
