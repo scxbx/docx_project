@@ -1,7 +1,7 @@
 import os
 
 import openpyxl
-import win32com
+import win32com.client
 
 
 def xls_to_xlsx(folder_path, file_name):
@@ -51,12 +51,22 @@ def produce_a_confirm(filename, start_row):
 
     book_out = openpyxl.load_workbook(os.path.join(folder_path, r'..\copy.xlsx'))
     nrow = sheet_in.max_row
+    print ('nrow: ' + str(nrow))
 
+    flag = 1
+    num_family = 0
+    while flag < nrow + 1:
+        if (sheet_in.cell(flag, 1).value == '合计' or sheet_in.cell(flag, 1).value == '汇总'):
+            num_family = sheet_in.cell(flag, 2).value
+        flag += 1
+    print(num_family)
+    '''
     if isinstance(sheet_in.cell(nrow, 2).value, int):
         num_family = sheet_in.cell(nrow, 2).value
     else:
         num_family = 500
-    for i in range(num_family -1):
+    '''
+    for i in range(num_family):
         book_out.copy_worksheet(book_out.active)
     sheets_out = book_out.sheetnames
 
@@ -68,9 +78,10 @@ def produce_a_confirm(filename, start_row):
     # row_now = start_row
     count_in_family = 0
     sheet_out = book_out[sheets_out[serial_number]]
-    for i in range(start_row, nrow + 1 - 1):
+    for i in range(start_row, flag - 2):
         if sheet_in.cell(i, 1).value is not None:
-
+            print(serial_number)
+            print(sheets_out[serial_number])
             sheet_out = book_out[sheets_out[serial_number]]
             # 序号
             sheet_out['K2'] = serial_number + 1
@@ -117,6 +128,7 @@ if __name__ == '__main__':
     path = os.path.join(os.getcwd(), 'summary')
     for filename_in in os.listdir(path):
         # print(os.path.join(path, filename))
+        print(filename_in)
         produce_a_confirm(os.path.join(path, filename_in), 4)
 
     input('Press any key to quit program.')
