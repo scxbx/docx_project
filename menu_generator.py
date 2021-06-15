@@ -73,11 +73,11 @@ def replace_name(filename, summary_path):
         if summary_sheet.cell(2, i).value is not None and type(
                 summary_sheet.cell(2, i).value) == str and '集体经济组织名称' in summary_sheet.cell(2, i).value:
             # print(summary_sheet.cell(2, i).value)
-            completName = summary_sheet.cell(2, i).value.split('：')[1]
-            # print(completName)
+            completeName = summary_sheet.cell(2, i).value.split('：')[1]
+            # print(completeName)
             # 县
-            county = completName.split('县', 1)[0] + '县'
-            county_right = completName.split('县', 1)[1]
+            county = completeName.split('县', 1)[0] + '县'
+            county_right = completeName.split('县', 1)[1]
             # (county)
             # 镇 乡
             if '镇' in county_right:
@@ -110,13 +110,15 @@ def replace_name(filename, summary_path):
                 group = village_right.split('组', 1)[0]
                 isCommittee = False
             # print(group)
+        else:
+            print('{} cannot find'.format(i))
 
     for sheet_in in book_in.worksheets:
         # print(type(sheet_in.title))
-        if isCommittee == False:
+        if isCommittee is False:
             sheet_in.title = sheet_in.title.replace("东排湾村民小组", group + '村民小组')
         else:
-            if ('村' in village):
+            if '村' in village:
                 sheet_in.title = sheet_in.title.replace("东排湾村民小组", village + '委会')
             else:
                 sheet_in.title = sheet_in.title.replace("东排湾村民小组", village)
@@ -128,8 +130,8 @@ def replace_name(filename, summary_path):
                 if type(cell.value) is str:
                     cell.value = cell.value.replace('澄迈县', county)
                     cell.value = cell.value.replace("加乐镇", town)
-                    if (isCommittee == False):
-                        if ('村' in village):
+                    if isCommittee == False:
+                        if '村' in village:
                             cell.value = cell.value.replace("加桐村委会东排湾村民小组", village + '委会' + group + '村民小组')
                             # (village + '委会' + group + '村民小组')
                         else:
@@ -140,7 +142,7 @@ def replace_name(filename, summary_path):
                         cell.value = cell.value.replace("加桐村东排湾组", village + group + '组')
                         # print(village + group + '组')
                     else:
-                        if ('村' in village):
+                        if '村' in village:
                             cell.value = cell.value.replace("加桐村委会东排湾村民小组", village + '委会')
                         else:
                             cell.value = cell.value.replace("加桐村委会东排湾村民小组", village)

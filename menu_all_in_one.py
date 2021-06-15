@@ -24,7 +24,8 @@ def all_in_one(filename_in):
                     sheet_in_4.cell(54 * i + j + 59, 4).value = sheet_in_i.cell(j + 4, 4).value
 
                     sheet_in_4.cell(54 * i + j + 59, 1).alignment = Alignment(vertical='center', horizontal='center')
-                    sheet_in_4.cell(54 * i + j + 59, 3).alignment = Alignment(wrapText=True, vertical='center', horizontal='center')
+                    sheet_in_4.cell(54 * i + j + 59, 3).alignment = Alignment(wrapText=True, vertical='center',
+                                                                              horizontal='center')
                     sheet_in_4.cell(54 * i + j + 59, 4).alignment = Alignment(wrapText=True)
 
             book_in.remove(sheet_in_i)
@@ -49,8 +50,6 @@ def all_in_one(filename_in):
         for cell in row:
             cell.font = Font(size=9)
             cell.border = border_set
-
-
 
     filename_save = (os.path.split(filename_in))[1].split('.')[0] + '改.xlsx'
     folder_path2 = folder_path + r'\..\new menu'
