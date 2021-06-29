@@ -84,19 +84,19 @@ def generate_one_warrant(excel_path, confirm_sheet, index, para_list):
         if count > 14:
             print('警告：编号为{}的股权证中人数超过14，需手动调整！'.format(sheet_id))
 
-    warrant_sheet3['T38'] = count * 10
+    warrant_sheet3['T39'] = count * 10
 
     last4 = str(index + 1).zfill(4)
 
     warrant_sheet1['X22'] = para_list[0]
     warrant_sheet1['V31'] = para_list[1]
-    warrant_sheet1['W52'] = para_list[2]
-    warrant_sheet1['W78'] = para_list[3] + last4
-    warrant_sheet1['X86'] = para_list[4]
-    warrant_sheet1['AA86'] = para_list[5]
-    warrant_sheet1['AB86'] = para_list[6]
+    warrant_sheet1['W54'] = para_list[2]
+    warrant_sheet1['W81'] = para_list[3] + last4
+    warrant_sheet1['X89'] = para_list[4]
+    warrant_sheet1['AA89'] = para_list[5]
+    warrant_sheet1['AB89'] = para_list[6]
 
-    warrant_sheet3['T41'] = para_list[7]
+    warrant_sheet3['T42'] = para_list[7]
 
     filename_save = last4 + confirm_sheet['A10'].value + '股权证.xlsx'
     (Path("warrant") / para_list[1]).mkdir(parents=True, exist_ok=True)
