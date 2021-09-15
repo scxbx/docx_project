@@ -77,7 +77,7 @@
 
 #### share_warrant_generator.py
 
-<img src=".\pictures\share_warrant_generator.png" alt="share_warrant_generator"  />
+<img src=".\pictures\share_warrant_generator.PNG" alt="share_warrant_generator"  />
 
 结合用户在图形界面输入的信息，将确认表生成**股权证**。用法如下：
 
