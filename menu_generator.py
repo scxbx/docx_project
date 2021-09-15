@@ -130,7 +130,7 @@ def replace_name(filename, summary_path):
                 if type(cell.value) is str:
                     cell.value = cell.value.replace('澄迈县', county)
                     cell.value = cell.value.replace("加乐镇", town)
-                    if isCommittee == False:
+                    if not isCommittee:
                         if '村' in village:
                             cell.value = cell.value.replace("加桐村委会东排湾村民小组", village + '委会' + group + '村民小组')
                             # (village + '委会' + group + '村民小组')
@@ -155,7 +155,7 @@ def replace_name(filename, summary_path):
 
     row_count = 0
     for row in summary_sheet:
-        if not all([cell.value == None for cell in row]):
+        if not all([cell.value is None for cell in row]):
             row_count += 1
     print("row_count: {}".format(row_count))
     householder_list = []
@@ -201,7 +201,7 @@ def replace_name(filename, summary_path):
 
     for i in range(num_per_sheet):
         if type(book_in[new_sheets_in[-1]].cell(i + 4, 4).value) == str and 'householders' in book_in[
-            new_sheets_in[-1]].cell(i + 4, 4).value:
+                new_sheets_in[-1]].cell(i + 4, 4).value:
             # print('householders')
             len_delete = num_per_sheet - len(householder_list) % num_per_sheet
             book_in[new_sheets_in[-1]].delete_rows(i + 4, len_delete)

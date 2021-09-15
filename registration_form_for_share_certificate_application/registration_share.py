@@ -1,32 +1,10 @@
 import os
 
 import openpyxl
-import win32com
 from openpyxl.styles import Alignment, Border, Side
 
+from menu_generator import xls_to_xlsx
 
-def xls_to_xlsx(folder_path, file_name):
-    """
-    excel  .xls 后缀 改成 .xlsx 后缀
-    folder_path 文件夹路径
-    file_name 文件名字 带后缀 比如 aa.xls
-    """
-    folder_path = folder_path.replace('/', '\\')
-    file_name = file_name.replace('/', '\\')
-    name, suffix = file_name.split('.')
-    excel_file_path = os.path.join(folder_path, file_name)
-
-    excel = win32com.client.gencache.EnsureDispatch('Excel.Application')  # 要看MIME手册
-    wb = excel.Workbooks.Open(excel_file_path)
-    suffix = f".{suffix}x"
-    new_file_name = f"{name}{suffix}"
-    new_excel_file_path = os.sep.join([folder_path, new_file_name])
-    # tset
-    print("new_excel_file_path: " + new_excel_file_path)
-    wb.SaveAs(new_excel_file_path, FileFormat=51)
-    wb.Close()
-    excel.Application.Quit()
-    return new_excel_file_path
 
 def gen_registration_share(sample_path, summary_path):
     print('-----------------------------------------开始----------------------------------------------')
@@ -62,17 +40,17 @@ def gen_registration_share(sample_path, summary_path):
         print("wrong file type: " + old_suffix2)
         return
 
-    book_summary = openpyxl.load_workbook(excel_path2)
+    book_summary = openpyxl.load_workbook(excel_path2, data_only=True)
     sheet_summary = book_summary.active
 
-    book_sample = openpyxl.load_workbook(excel_path)
+    book_sample = openpyxl.load_workbook(excel_path, data_only=True)
     sheet_sample = book_sample.active
 
     # for data in sheet_in['A']:
     #    print(data.value)
 
     # Get the number of rows in worksheet
-    max_row = len([row for row in sheet_summary if not all([cell.value is None for cell in row])])
+    max_row = get_max_row(sheet_summary)
     # print(max_row)
 
     sample_row = 3
@@ -81,13 +59,13 @@ def gen_registration_share(sample_path, summary_path):
         if serial_number is not None:
             sample_row += 1
             # print(serial_number)
-            sheet_sample.cell(sample_row, 1).value = serial_number
-            sheet_sample.cell(sample_row, 3).value = sheet_summary.cell(row + 1, 2).value
-            sheet_sample.cell(sample_row, 4).value = sheet_summary.cell(row + 1, 7).value
-            sheet_sample.cell(sample_row, 5).value = sheet_summary.cell(row + 1, 10).value
-            sheet_sample.cell(sample_row, 6).value = sheet_summary.cell(row + 1, 4).value
-            sheet_sample.cell(sample_row, 7).value = sheet_summary.cell(row + 1, 3).value
-            sheet_sample.cell(sample_row, 8).value = int(sheet_summary.cell(row + 1, 3).value) * 10
+            sheet_sample.cell(sample_row, 1).value = serial_number                                  # 序号
+            sheet_sample.cell(sample_row, 3).value = sheet_summary.cell(row + 1, 2).value           # 户主
+            sheet_sample.cell(sample_row, 4).value = sheet_summary.cell(row + 1, 7).value           # 身份证号
+            sheet_sample.cell(sample_row, 5).value = sheet_summary.cell(row + 1, 10).value          # 备注
+            sheet_sample.cell(sample_row, 6).value = sheet_summary.cell(row + 1, 4).value           # 家庭成员
+            sheet_sample.cell(sample_row, 7).value = sheet_summary.cell(row + 1, 3).value           # 人数
+            sheet_sample.cell(sample_row, 8).value = int(sheet_summary.cell(row + 1, 3).value) * 10 # 股权数
 
         else:
             # print('1. {}'.format(sheet_sample.cell(sample_row, 6).value))
@@ -134,6 +112,11 @@ def gen_registration_share(sample_path, summary_path):
     whole_save = os.path.join(folder_path2, filename_save)
     book_sample.save(whole_save)
     print('生成文件{}\n'.format(whole_save))
+
+
+def get_max_row(sheet):
+    max_row = len([row for row in sheet if not all([cell.value is None for cell in row])])
+    return max_row
 
 
 if __name__ == '__main__':

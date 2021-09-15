@@ -135,6 +135,7 @@ def produce_a_confirm(filename, start_row):
         ws = book_out[sheets_out[i]]
         ws.title = str(i + 1)
     book_out.save(whole_save)
+    print('生成确认表：{}'.format(whole_save))
     book_out.close()
 
 

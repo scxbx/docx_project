@@ -66,7 +66,7 @@ def read_summary(filename):
     no_dupl_merged_rows = list(set(merged_cells_rows))
     # print('合计', len(no_dupl_merged_rows))
 
-    #sorted_cr = sorted(no_dupl_merged_rows, key=lambda x: x[1])
+    # sorted_cr = sorted(no_dupl_merged_rows, key=lambda x: x[1])
     no_dupl_merged_rows.sort()
     # print(no_dupl_merged_rows)
     # print(len(no_dupl_merged_rows))
@@ -77,7 +77,7 @@ def read_summary(filename):
         dif = right - left
         if i > 0 and dif > 1:
             for j in range(1, dif):
-                to_add_list.append((left+j, left+j))
+                to_add_list.append((left + j, left + j))
 
     # print(to_add_list)
 
@@ -107,7 +107,6 @@ def read_summary(filename):
         if i < len(sheets_out):
             # fill in one sheet_in (one family)
             sheet_out = book_out[sheets_out[i]]
-
 
             '''
             # -------------------陵水 第四行开始 ---------------------------
@@ -183,10 +182,7 @@ def read_summary(filename):
             # 邮政编码
             sheet_out['J4'] = 572435
 
-
-
-
-            #unmerge
+            # unmerge
             # worksheet.merged_cells获取已经合并单元格的信息；再使用worksheet.unmerge_cells()拆分单元格；
             m_list = sheet_out.merged_cells
             cr = []
@@ -200,7 +196,6 @@ def read_summary(filename):
             for r in cr:
                 sheet_out.unmerge_cells(start_row=r[0], end_row=r[1], start_column=r[2], end_column=r[3])
 
-
             # 家庭成员信息
             for j in range(headcounts[i]):
                 # 姓名
@@ -212,7 +207,7 @@ def read_summary(filename):
                 # 身份证
                 # sheet_out.unmerge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
                 sheet_out.cell(10 + j, 5).value = sheet_in.cell(row_now, 7).value
-                if sheet_in.cell(row_now, 5).value in ['户主','本人']:
+                if sheet_in.cell(row_now, 5).value in ['户主', '本人']:
                     sheet_out['H5'] = sheet_in.cell(row_now, 7).value
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=5, end_column=8)
                 # 备注
@@ -220,14 +215,11 @@ def read_summary(filename):
                 sheet_out.cell(10 + j, 9).value = sheet_in.cell(row_now, 11).value
                 # sheet_out.merge_cells(start_row=10 + j, end_row=10 + j, start_column=9, end_column=11)
 
-
                 row_now += 1
 
             for r in cr:
                 # worksheet.merge_cells()合并单元格
                 sheet_out.merge_cells(start_row=r[0], end_row=r[1], start_column=r[2], end_column=r[3])
-
-
 
     # print(sheet_in['D15'].value)
 
@@ -237,6 +229,7 @@ def read_summary(filename):
     whole_save = os.path.join(folder_path2, filename_save)
 
     book_out.save(whole_save)
+
 
 if __name__ == '__main__':
     # read_summary(r'C:\Users\sc\Desktop\test_docx\summary_sample.xlsx')

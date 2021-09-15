@@ -92,9 +92,9 @@ def generate_one_warrant(excel_path, confirm_sheet, index, para_list):
     warrant_sheet1['V31'] = para_list[1]
     warrant_sheet1['W54'] = para_list[2]
     warrant_sheet1['W81'] = para_list[3] + last4
-    warrant_sheet1['X89'] = para_list[4]
-    warrant_sheet1['AA89'] = para_list[5]
-    warrant_sheet1['AB89'] = para_list[6]
+    warrant_sheet1['V89'] = para_list[4]
+    warrant_sheet1['X89'] = para_list[5]
+    warrant_sheet1['AA89'] = para_list[6]
 
     warrant_sheet3['T42'] = para_list[7]
 
@@ -105,6 +105,8 @@ def generate_one_warrant(excel_path, confirm_sheet, index, para_list):
     whole_save = folder_path2 / filename_save
     warrant_book.save(whole_save)
     # print(count)
+    warrant_book.close()
+
 
 
 def generate_share_warrants(warrant_path, confirm_path, para_list):
@@ -146,6 +148,8 @@ def generate_share_warrants(warrant_path, confirm_path, para_list):
 
     if old_suffix == 'xls':
         os.remove(excel_path)
+
+    confirm_book.close()
 
 
 if __name__ == '__main__':
